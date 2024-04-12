@@ -29,6 +29,47 @@ class Mahasiswa extends Controller {
             exit;
         }
     }
+    public function hapus ($id){
+        // var_dump($_POST);
+        if($this->model('Mahasiswa_model')->hapusDataMahasiswa($id) > 0 ){
+            Flasher::setFlash('berhasil', 'dihapus', 'success');
+            header('location: ' . BASEURL . '/mahasiswa');
+            exit;
+        } else {
+            Flasher::setFlah('gagal', 'dihapus', 'danger');
+            header('location: ' . BASEURL . '/mahasiswa');
+            exit;
+        }
+    }
+
+    public function getUbah(){
+    // echo 'ok';
+    //   echo $_POST['id'];
+    echo json_encode($this->model('Mahasiswa_model')->getMahasiswaByid
+    ($_POST['id']));
+    }
+
+    public function ubah(){
+        if($this->model('Mahasiswa_model')->ubahDataMahasiswa($_POST) > 0 ){
+            Flasher::setFlash('berhasil', 'diubah', 'success');
+            header('location: ' . BASEURL . '/mahasiswa');
+            exit;
+        } else {
+            Flasher::setFlash('gagal', 'diubah', 'danger'); // Perhatikan penulisan nama metode di sini
+            header('location: ' . BASEURL . '/mahasiswa');
+            exit;
+        }
+        
+    }
+
+    public function cari(){
+
+        $data['judul'] = 'Daftar Mahasiswa';
+        $data['mhs'] = $this->model('Mahasiswa_model')->cariDataMahasiswa();
+        $this->view('template/header', $data);
+        $this->view('mahasiswa/index', $data);
+        $this->view('template/footer');
+    }
 }
 
-?>
+?>  
