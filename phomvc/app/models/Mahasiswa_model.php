@@ -80,6 +80,52 @@ class Mahasiswa_model{
         return $this->db->rowCount();
     }
     
+    public function hapusDataMahasiswa($id){
+        $query ="DELETE FROM mahasiswa WHERE id = :id";
+        $this->db->query($query);
+        $this->db->bind('id', $id);
+
+        $this->db->execute();
+
+        return $this->db->rowCount();
+    }
+
+    public function ubahDataMahasiswa($data){
+        if (!isset($data['prodi'])) {
+
+            $data['prodi'] = 'Default Prodi';
+        }
+    
+        $query = "UPDATE mahasiswa SET 
+                        nama = :nama,
+                        nim = :nim,
+                        email = :email,
+                        prodi = :prodi
+                        WHERE id = :id";
+        
+        $this->db->query($query);
+        $this->db->bind('nama', $data['nama']);
+        $this->db->bind('nim', $data['nim']);
+        $this->db->bind('email', $data['email']);
+        $this->db->bind('prodi', $data['prodi']);
+        $this->db->bind('id', $data['id']);
+    
+        $this->db->execute();
+    
+        return $this->db->rowCount();
+    }
+
+
+    public function cariDataMahasiswa(){
+        $keyword = $_POST['keyword']; 
+        $query = "SELECT * FROM mahasiswa WHERE nama LIKE :keyword"; 
+        $this->db->query($query);
+        $this->db->bind('keyword', "%$keyword%"); 
+        return $this->db->resultSet();
+    }
+    
+
+      
 }
 
 ?>
